@@ -54,10 +54,57 @@ def generate_data(quantities):
     return data
 
 
+def count_numbers_after_coma(x):
+    r1, r2 = math.modf(x)
+    if r2 != 0.0:
+        return 3
+    res = 0
+    r1 *= 10
+    while True:
+        _, t1 = math.modf(r1)
+        if t1 != 0.0:
+            break
+        res += 1
+        r1 *= 10
+    return res + 3
+
+
+def print_result_as_latex_table(results, quantities, names):
+    for i in range(len(names)):
+        print('\\begin{table}[H]\n\t\\centering')
+        print('\t\\begin{tabular}{||c|p{2.65cm}|p{2.65cm}|p{2.65cm}|p{2.65cm}|p{2.65cm}||}\n\t\\hline')
+        print('\t& $\\overline{x}$(\\ref{eq:8}) & $med~x$(\\ref{eq:9}) & $z_R$(\\ref{eq:10}) & $z_Q$(\\ref{eq:11}) & '
+              '$z_{tr}$(\\ref{eq:12})\\\\\n\t\\hline')
+        for j in range(len(quantities)):
+            print('\t$n =', quantities[j], '$& & & & & \\\\\n\t\\hline\n\t$E$', end='')
+            if j == 0:
+                print('(\\ref{eq:1})', end='')
+            e_arr = []
+            d_arr = []
+            accuracies = []
+            for k in range(len(results)):
+                e_arr.append(mean(results[k][j][i]))
+                d_arr.append(var(results[k][j][i]))
+            for k in range(len(results)):
+                accuracies.append(max(count_numbers_after_coma(e_arr[k]), count_numbers_after_coma(d_arr[k])))
+            for k in range(len(results)):
+                print(' & $%.*f$' % (accuracies[k], e_arr[k]), end='')
+            print(' \\\\\n\t\\hline\n\t$D$', end='')
+            if j == 0:
+                print('(\\ref{eq:2})', end='')
+            for k in range(len(results)):
+                print(' & $%.*f$' % (accuracies[k], d_arr[k]), end='')
+            print(' \\\\\n\t\\hline\n\t$E\\pm \\sqrt{D}$', end='')
+            for k in range(len(results)):
+                print(' & $[%.*f,$ $%.*f]$' % (accuracies[k], e_arr[k] - np.sqrt(d_arr[k]),
+                                               accuracies[k], e_arr[k] + np.sqrt(d_arr[k])), end='')
+            print(' \\\\\n\t\\hline\n\t$\\hat{E}$ & $ $ & $ $ & $ $ & $ $ & $ $ \\\\\n\t\\hline')
+        print('\t\\end{tabular}\n\t\\caption{', names[i], '}\n\t\\label{tab:', i + 1, '}\n\\end{table}\n')
+
+
 def do_research():
-    names = ['Normal distribution', 'Cauchy Distribution', 'Laplace Distribution',
-             'Poisson Distribution', 'Uniform Distribution']
-    character_names = ['Mean', 'Med', 'Zr', 'Zq', 'Ztr']
+    names = ['Нормальное распределение', 'Распределение Коши', 'Распределение Лапласа',
+             'Распределение Пуассона', 'Равномерное распределение']
     character = [mean, med, z_r, z_q, z_tr]
     quantities = [10, 100, 1000]
     results = [[[[] for _ in range(5)] for _ in range(3)] for _ in range(5)]
@@ -67,10 +114,4 @@ def do_research():
             for k in range(3):  # size
                 for m in range(5):  # distribution
                     results[j][k][m].append(character[j](data[k][m]))
-    for i in range(5):
-        print(names[i])
-        for j in range(3):
-            print(f"N = {quantities[j]}")
-            for k in range(5):
-                print("E of", character_names[k], "=", mean(results[k][j][i]))
-                print("D of", character_names[k], "=", var(results[k][j][i]))
+    print_result_as_latex_table(results, quantities, names)
