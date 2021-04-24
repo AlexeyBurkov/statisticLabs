@@ -1,4 +1,4 @@
-from lab2 import do_research
+from lab3 import do_research
 
 
 if __name__ == '__main__':
