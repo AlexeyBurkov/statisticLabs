@@ -26,7 +26,6 @@ def do_research():
     data = generate_data(quantities)
     for i in range(len(data)):
         distribution_boxplot(data[i], quantities, names[i])
-
     outliers = [[0 for _ in range(len(quantities))] for _ in range(len(names))]
     for _ in range(samples):
         data = generate_data(quantities)
