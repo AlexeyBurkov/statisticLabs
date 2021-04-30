@@ -65,9 +65,9 @@ def do_research():
     data = []
     for i in range(3):
         data.append([np.random.normal(0, 1, quantities[i]), np.random.standard_cauchy(quantities[i]),
-                     np.random.laplace(0, np.sqrt(3), quantities[i]), np.random.poisson(10, quantities[i]),
+                     np.random.laplace(0, 1/np.sqrt(2), quantities[i]), np.random.poisson(10, quantities[i]),
                      np.random.uniform(-np.sqrt(3), np.sqrt(3), quantities[i])])
-    for i in range(5):
+    for i in range(len(names)):
         plt.suptitle(names[i])
         for j in range(3):
             plt.subplot(1, 3, j + 1)
