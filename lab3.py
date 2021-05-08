@@ -2,15 +2,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def distribution_boxplot(distribs, sizes, name):
+def _distribution_boxplot(distributions, sizes, name):
     labels = [f'n = {sizes[i]}' for i in range(len(sizes))]
-    plt.boxplot(distribs, labels=labels)
+    plt.boxplot(distributions, labels=labels)
     plt.ylabel('Value')
     plt.title(name)
+    plt.savefig('plots/lab3/' + name + ' Boxplot.png', format='png')
     plt.show()
 
 
-def generate_data(quantities):
+def _generate_data(quantities):
     return [[np.random.normal(0, 1, i) for i in quantities],
             [np.random.standard_cauchy(i) for i in quantities],
             [np.random.laplace(0, np.sqrt(3), i) for i in quantities],
@@ -18,17 +19,17 @@ def generate_data(quantities):
             [np.random.uniform(-np.sqrt(3), np.sqrt(3), i) for i in quantities]]
 
 
-def do_research():
-    names = ['Нормальное распределение', 'Распределение Коши', 'Распределение Лапласа',
-             'Распределение Пуассона', 'Равномерное распределение']
+def do_boxplot_research():
+    names = ['Normal distribution', 'Cauchy Distribution', 'Laplace Distribution',
+             'Poisson Distribution', 'Uniform Distribution']
     quantities = [20, 100]
     samples = 1000
-    data = generate_data(quantities)
+    data = _generate_data(quantities)
     for i in range(len(data)):
-        distribution_boxplot(data[i], quantities, names[i])
+        _distribution_boxplot(data[i], quantities, names[i])
     outliers = [[0 for _ in range(len(quantities))] for _ in range(len(names))]
     for _ in range(samples):
-        data = generate_data(quantities)
+        data = _generate_data(quantities)
         for j in range(len(data)):
             for k in range(len(data[j])):
                 left = np.quantile(data[j][k], 0.25) - 1.5 * (
