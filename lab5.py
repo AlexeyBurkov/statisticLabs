@@ -52,6 +52,8 @@ def do_ellipse_research():
     quantities = [20, 60, 100]
     names = ['Normal distribution, $\\rho$ = 0', 'Normal distribution, $\\rho$ = 0.5',
              'Normal distribution, $\\rho$ = 0.9', 'Mix of normal distributions']
+    fnames = ['Normal distribution, r = 0', 'Normal distribution, r = 0.5',
+              'Normal distribution, r = 0.9', 'Mix of normal distributions']
     data = generate_data(quantities, rho)
     for i in range(len(data)):
         _, axs = plt.subplots(1, len(quantities), figsize=(12, 4), dpi=100)
@@ -69,6 +71,7 @@ def do_ellipse_research():
                   d_y * (np.sin(angle_a) ** 2)
             d_h = d_x * (np.sin(angle_a) ** 2) - r * np.sqrt(d_x * d_y) * np.sin(2 * angle_a) + \
                   d_y * (np.cos(angle_a) ** 2)
-            draw_ellipse(mean(x_arr), mean(y_arr), 6 * np.sqrt(2*d_h), 6 * np.sqrt(2*d_w), angle_a * 180 / np.pi,
+            draw_ellipse(mean(x_arr), mean(y_arr), 6 * np.sqrt(d_h), 6 * np.sqrt(d_w), angle_a * 180 / np.pi,
                          f'size = {quantities[j]}', axs[j])
+        plt.savefig('plots/lab5/' + fnames[i] + '.png', format='png')
         plt.show()
