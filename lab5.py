@@ -36,6 +36,12 @@ def do_correlation_research():
                     temp[s] **= 2
                 print(f'\trho = {rho[k]}, size = {quantities[m]}\n\t\tE = {mean(data[k][m][i])}\n'
                       f'\t\tE^2 = {mean(temp)}\n\t\tD = {var(data[k][m][i])}')
+        for m in range(len(quantities)):
+            temp = data[len(rho)][m][i].copy()
+            for s in range(len(temp)):
+                temp[s] **= 2
+            print(f'\tmix, size = {quantities[m]}\n\t\tE = {mean(data[len(rho)][m][i])}\n'
+                  f'\t\tE^2 = {mean(temp)}\n\t\tD = {var(data[len(rho)][m][i])}')
 
 
 def draw_ellipse(x_0, y_0, h, w, angle, name, ax):
